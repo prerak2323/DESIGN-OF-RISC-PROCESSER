@@ -1,0 +1,24 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity Complete_MIPS is 
+ port (clk, RST : in std_logic;
+       A_Out, D_out : out unsigned(31 downto 0));
+end Complete_MIPS;
+
+architecture model of Complete_MIPS is 
+ component MIPS is port( clk, RST : in std_logic;
+                         CS, WE : out std_logic;
+                         ADDR : out unsigned(31 downto 0));
+end component;
+
+       
+signal CS, WE : std_logic;
+signal ADDR,Mem_Bus : unsigned(31 downto 0);
+ begin
+ CPU : MIPS port map(clk, RST, CS, WE, ADDR, Mem_Bus);
+ MEM : Memory port map(CS, WE, clk, ADDR, Mem_Bus);
+ A_Out <= ADDR;
+ B_Out <= Mem_Bus;
+end model;
